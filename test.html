@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تطبيق تقييم الحروف العربية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Dubai', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #6366f1;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+        }
+
+        .test-section h2 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            border-right: 4px solid #6366f1;
+            padding-right: 10px;
+        }
+
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-item.success {
+            border-right: 3px solid #10b981;
+        }
+
+        .test-item.failed {
+            border-right: 3px solid #ef4444;
+        }
+
+        .test-item.pending {
+            border-right: 3px solid #f59e0b;
+        }
+
+        .icon {
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        .status {
+            flex: 1;
+        }
+
+        .status-text {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .status-message {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .summary-card {
+            text-align: center;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-right: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: #92400e;
+        }
+
+        .error-box {
+            background: #fee2e2;
+            border-right: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: #7f1d1d;
+        }
+
+        .success-box {
+            background: #dcfce7;
+            border-right: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: #15803d;
+        }
+
+        .loader {
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #6366f1;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 اختبار تطبيق تقييم الحروف العربية</h1>
+        <p class="subtitle">فحص شامل لجميع مكونات التطبيق والوظائف</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-primary" onclick="runAllTests()">🚀 تشغيل جميع الاختبارات</button>
+            <button class="btn-secondary" onclick="clearResults()">🗑️ مسح النتائج</button>
+            <button class="btn-secondary" onclick="goToApp()">📱 الذهاب للتطبيق</button>
+        </div>
+
+        <div id="testResults"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        let totalTests = 0;
+        let passedTests = 0;
+        let failedTests = 0;
+
+        function addTest(category, testName, passed, message = '') {
+            const resultsDiv = document.getElementById('testResults');
+            
+            if (!resultsDiv.querySelector(`[data-category="${category}"]`)) {
+                const section = document.createElement('div');
+                section.className = 'test-section';
+                section.setAttribute('data-category', category);
+                section.innerHTML = `<h2>${category}</h2><div class="category-tests"></div>`;
+                resultsDiv.appendChild(section);
+            }
+
+            const categorySection = resultsDiv.querySelector(`[data-category="${category}"] .category-tests`);
+            const testItem = document.createElement('div');
+            testItem.className = `test-item ${passed ? 'success' : 'failed'}`;
+            
+            const icon = passed ? '✅' : '❌';
+            const status = passed ? 'نجح' : 'فشل';
+            
+            testItem.innerHTML = `
+                <div class="icon">${icon}</div>
+                <div class="status">
+                    <div class="status-text">${testName}</div>
+                    ${message ? `<div class="status-message">${message}</div>` : ''}
+                </div>
+            `;
+            
+            categorySection.appendChild(testItem);
+            
+            totalTests++;
+            if (passed) {
+                passedTests++;
+            } else {
+                failedTests++;
+            }
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const percentage = totalTests > 0 ? (passedTests / totalTests) * 100 : 0;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function runAllTests() {
+            clearResults();
+            totalTests = 0;
+            passedTests = 0;
+            failedTests = 0;
+
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div class="loader"></div><p style="text-align: center; margin-top: 10px;">جاري تشغيل الاختبارات...</p>';
+
+            setTimeout(() => {
+                resultsDiv.innerHTML = '';
+                
+                // ============ اختبارات البيانات الأساسية ============
+                testArabicLettersData();
+                
+                // ============ اختبارات معالج التحليل ============
+                testAnalyzer();
+                
+                // ============ اختبارات معالج البيانات ============
+                testDataManager();
+                
+                // ============ اختبارات واجهة المستخدم ============
+                testUIElements();
+                
+                // ============ اختبارات التوافقية ============
+                testCompatibility();
+                
+                // عرض الملخص
+                showSummary();
+            }, 500);
+        }
+
+        function testArabicLettersData() {
+            try {
+                addTest('📊 بيانات الحروف العربية', 'وجود 28 حرفاً', ARABIC_LETTERS.length === 28);
+            } catch (e) {
+                addTest('📊 بيانات الحروف العربية', 'وجود 28 حرفاً', false, e.message);
+            }
+
+            try {
+                let valid = true;
+                ARABIC_LETTERS.forEach((letter, index) => {
+                    if (!letter.letter || !letter.name || !letter.alternatives) {
+                        valid = false;
+                    }
+                });
+                addTest('📊 بيانات الحروف العربية', 'صحة خصائص الحروف', valid);
+            } catch (e) {
+                addTest('📊 بيانات الحروف العربية', 'صحة خصائص الحروف', false, e.message);
+            }
+
+            try {
+                const letters = ARABIC_LETTERS.map(l => l.letter);
+                const unique = new Set(letters);
+                addTest('📊 بيانات الحروف العربية', 'الحروف فريدة (بدون تكرار)', letters.length === unique.size);
+            } catch (e) {
+                addTest('📊 بيانات الحروف العربية', 'الحروف فريدة', false, e.message);
+            }
+
+            try {
+                const valid = CONFIG.totalLetters === 28 && CONFIG.recordingTimeout && CONFIG.language;
+                addTest('📊 بيانات الحروف العربية', 'صحة الإعدادات', valid);
+            } catch (e) {
+                addTest('📊 بيانات الحروف العربية', 'صحة الإعدادات', false, e.message);
+            }
+        }
+
+        function testAnalyzer() {
+            try {
+                const letter = ARABIC_LETTERS[0];
+                const result = ResultAnalyzer.analyzeAnswer('الالف', letter);
+                addTest('🔍 معالج التحليل', 'تحليل إجابة صحيحة', result.isCorrect);
+            } catch (e) {
+                addTest('🔍 معالج التحليل', 'تحليل إجابة صحيحة', false, e.message);
+            }
+
+            try {
+                const letter = ARABIC_LETTERS[0];
+                const result = ResultAnalyzer.analyzeAnswer('خطأ تماماً', letter);
+                addTest('🔍 معالج التحليل', 'تحليل إجابة خاطئة', !result.isCorrect);
+            } catch (e) {
+                addTest('🔍 معالج التحليل', 'تحليل إجابة خاطئة', false, e.message);
+            }
+
+            try {
+                const similarity = ResultAnalyzer.calculateSimilarity('الف', 'الالف');
+                addTest('🔍 معالج التحليل', 'حساب التشابه', similarity >= 0 && similarity <= 1);
+            } catch (e) {
+                addTest('🔍 معالج التحليل', 'حساب التشابه', false, e.message);
+            }
+
+            try {
+                const distance = ResultAnalyzer.getEditDistance('test', 'tests');
+                addTest('🔍 معالج التحليل', 'المسافة التحريرية', distance >= 0);
+            } catch (e) {
+                addTest('🔍 معالج التحليل', 'المسافة التحريرية', false, e.message);
+            }
+        }
+
+        function testDataManager() {
+            try {
+                const testData = [{ letter: 'ا', isCorrect: true }];
+                DataManager.saveResults('تجربة', testData);
+                const retrieved = DataManager.getResults();
+                addTest('💾 معالج البيانات', 'حفظ واسترجاع النتائج', retrieved !== null);
+            } catch (e) {
+                addTest('💾 معالج البيانات', 'حفظ واسترجاع النتائج', false, e.message);
+            }
+
+            try {
+                DataManager.clearResults();
+                const retrieved = DataManager.getResults();
+                addTest('💾 معالج البيانات', 'مسح البيانات', retrieved === null);
+            } catch (e) {
+                addTest('💾 معالج البيانات', 'مسح البيانات', false, e.message);
+            }
+
+            try {
+                const test = '__test__';
+                localStorage.setItem(test, test);
+                const value = localStorage.getItem(test);
+                localStorage.removeItem(test);
+                addTest('💾 معالج البيانات', 'دعم localStorage', value === test);
+            } catch (e) {
+                addTest('💾 معالج البيانات', 'دعم localStorage', false, 'localStorage معطل');
+            }
+        }
+
+        function testUIElements() {
+            const elements = [
+                'welcomeScreen', 'testScreen', 'resultsScreen',
+                'studentName', 'startBtn', 'letterChar', 'recordBtn'
+            ];
+
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                addTest('🎨 عناصر الواجهة', `وجود عنصر ${id}`, element !== null);
+            });
+
+            try {
+                const htmlLang = document.documentElement.lang;
+                addTest('🎨 عناصر الواجهة', 'اللغة العربية محددة', htmlLang === 'ar');
+            } catch (e) {
+                addTest('🎨 عناصر الواجهة', 'اللغة العربية محددة', false);
+            }
+
+            try {
+                const htmlDir = document.documentElement.dir;
+                addTest('🎨 عناصر الواجهة', 'الاتجاه RTL صحيح', htmlDir === 'rtl');
+            } catch (e) {
+                addTest('🎨 عناصر الواجهة', 'الاتجاه RTL صحيح', false);
+            }
+        }
+
+        function testCompatibility() {
+            try {
+                const supported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+                addTest('🌐 التوافقية', 'دعم Web Speech API', supported, supported ? '' : 'قد لا يعمل على Firefox بدون إضافات');
+            } catch (e) {
+                addTest('🌐 التوافقية', 'دعم Web Speech API', false);
+            }
+
+            try {
+                const supported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+                addTest('🌐 التوافقية', 'دعم MediaRecorder API', supported);
+            } catch (e) {
+                addTest('🌐 التوافقية', 'دعم MediaRecorder API', false);
+            }
+
+            try {
+                const supported = typeof(Storage) !== 'undefined';
+                addTest('🌐 التوافقية', 'دعم localStorage', supported);
+            } catch (e) {
+                addTest('🌐 التوافقية', 'دعم localStorage', false);
+            }
+        }
+
+        function showSummary() {
+            const percentage = totalTests > 0 ? ((passedTests / totalTests) * 100).toFixed(1) : 0;
+            
+            const resultsDiv = document.getElementById('testResults');
+            
+            let statusBox = '';
+            if (failedTests === 0) {
+                statusBox = `<div class="success-box">🎉 جميع الاختبارات نجحت! التطبيق جاهز للاستخدام.</div>`;
+            } else if (failedTests <= 3) {
+                statusBox = `<div class="warning-box">⚠️ هناك ${failedTests} اختبارات فاشلة. يرجى التحقق منها.</div>`;
+            } else {
+                statusBox = `<div class="error-box">❌ هناك عدة اختبارات فاشلة تحتاج إلى معالجة.</div>`;
+            }
+
+            const summary = `
+                ${statusBox}
+                <div class="summary">
+                    <div class="summary-card">
+                        <div class="summary-number">${totalTests}</div>
+                        <div class="summary-label">إجمالي الاختبارات</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" style="color: #10b981;">${passedTests}</div>
+                        <div class="summary-label">✅ نجح</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" style="color: #ef4444;">${failedTests}</div>
+                        <div class="summary-label">❌ فشل</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #6366f1;">
+                        النسبة المئوية: ${percentage}%
+                    </p>
+                </div>
+            `;
+
+            resultsDiv.innerHTML += summary;
+        }
+
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+            totalTests = 0;
+            passedTests = 0;
+            failedTests = 0;
+            updateProgress();
+        }
+
+        function goToApp() {
+            window.location.href = 'index.html';
+        }
+
+        // تشغيل الاختبارات تلقائياً عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            console.log('✅ صفحة الاختبار جاهزة');
+        });
+    </script>
+</body>
+</html>
