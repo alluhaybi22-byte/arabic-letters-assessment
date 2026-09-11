@@ -1,0 +1,56 @@
+{
+  "name": "arabic-letters-assessment",
+  "version": "1.0.0",
+  "description": "نظام تقييم حروف اللغة العربية التفاعلي - Arabic Letters Assessment System",
+  "main": "app.html",
+  "scripts": {
+    "start": "open app.html",
+    "test": "open 'app.html#test'",
+    "test:advanced": "open 'app.html#advanced-test'",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "arabic",
+    "education",
+    "assessment",
+    "letters",
+    "learning",
+    "interactive",
+    "test",
+    "حروف",
+    "عربي",
+    "تقييم",
+    "تعليم"
+  ],
+  "author": "alluhaybi22-byte",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alluhaybi22-byte/arabic-letters-assessment.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alluhaybi22-byte/arabic-letters-assessment/issues"
+  },
+  "homepage": "https://github.com/alluhaybi22-byte/arabic-letters-assessment#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "categories": [
+    "Education",
+    "Language Learning",
+    "Assessment",
+    "Interactive"
+  ],
+  "features": [
+    "28 Arabic Letters",
+    "User Authentication",
+    "Interactive Testing Sessions",
+    "Score Calculation",
+    "History Tracking",
+    "Advanced UI",
+    "Security System",
+    "Analytics",
+    "Light/Dark Theme",
+    "Responsive Design"
+  ]
+}
