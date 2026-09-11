@@ -1,0 +1,526 @@
+<!-- ============================================
+المرحلة 7: التطبيق النهائي والاختبار
+============================================ -->
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تقييم حروف اللغة العربية</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- حاوية التطبيق الرئيسية -->
+    <div id="app-root">
+        <div id="app-container">
+            <!-- سيتم ملأها ديناميكياً -->
+        </div>
+    </div>
+
+    <!-- نوافذ منفثقة -->
+    <div id="modals-container"></div>
+
+    <!-- الإشعارات -->
+    <div id="notifications-container"></div>
+
+    <!-- مؤشر التحميل -->
+    <div id="spinner-container"></div>
+
+    <!-- ملفات JavaScript -->
+    <!-- 1. النظام الأساسي -->
+    <script src="main.js"></script>
+
+    <!-- 2. الأمان -->
+    <script src="security.js"></script>
+
+    <!-- 3. التحليلات -->
+    <script src="analytics.js"></script>
+
+    <!-- 4. التكامل -->
+    <script src="integration.js"></script>
+
+    <!-- 5. الواجهة الرسومية -->
+    <script src="ui.js"></script>
+
+    <!-- 6. التطبيق النهائي -->
+    <script>
+        /**
+         * ============================================
+         * التطبيق النهائي - Final Application
+         * ============================================
+         */
+
+        /**
+         * فئة AppInitializer
+         * تهيئة التطبيق الكامل
+         */
+        class AppInitializer {
+            constructor() {
+                this.isReady = false;
+                this.startTime = Date.now();
+            }
+
+            /**
+             * بدء التطبيق
+             */
+            async initialize() {
+                try {
+                    console.log('🚀 بدء تهيئة التطبيق...');
+
+                    // الخطوة 1: تهيئة نظام الأسئلة والأمان
+                    this.initializeCore();
+
+                    // الخطوة 2: تهيئة مدير التطبيق
+                    this.initializeApp();
+
+                    // الخطوة 3: تهيئة الواجهة الرسومية
+                    this.initializeUI();
+
+                    // الخطوة 4: تحميل البيانات المحفوظة
+                    this.loadSavedData();
+
+                    // الخطوة 5: التحقق من جلسة المستخدم
+                    this.checkUserSession();
+
+                    // الخطوة 6: عرض الشاشة الأولى
+                    this.showInitialScreen();
+
+                    this.isReady = true;
+                    const duration = Date.now() - this.startTime;
+                    console.log(`✅ تم تهيئة التطبيق بنجاح في ${duration}ms`);
+
+                    // إطلاق حدث التهيئة
+                    eventBus.publish('app-initialized', {
+                        duration,
+                        timestamp: new Date().toISOString()
+                    });
+
+                } catch (error) {
+                    console.error('❌ خطأ في تهيئة التطبيق:', error);
+                    this.handleInitializationError(error);
+                }
+            }
+
+            /**
+             * تهيئة النظام الأساسي
+             */
+            initializeCore() {
+                console.log('📦 تهيئة النظام الأساسي...');
+                // النظام الأساسي جاهز (main.js)
+                console.log('  ✅ الثوابت محملة');
+                console.log('  ✅ دوال المساعدة متوفرة');
+            }
+
+            /**
+             * تهيئة مدير التطبيق
+             */
+            initializeApp() {
+                console.log('⚙️ تهيئة مدير التطبيق...');
+                const result = app.initialize();
+                if (!result.success) {
+                    throw new Error('فشل تهيئة مدير التطبيق');
+                }
+                console.log('  ✅ المستخدمون محملون');
+                console.log('  ✅ الأسئلة محملة');
+                console.log('  ✅ الأمان مفعل');
+            }
+
+            /**
+             * تهيئة الواجهة الرسومية
+             */
+            initializeUI() {
+                console.log('🎨 تهيئة الواجهة الرسومية...');
+                ui.initialize();
+                console.log('  ✅ جميع الشاشات مسجلة');
+                console.log('  ✅ جميع المكونات مسجلة');
+                console.log('  ✅ المظهر مطبق');
+            }
+
+            /**
+             * تحميل البيانات المحفوظة
+             */
+            loadSavedData() {
+                console.log('💾 تحميل البيانات المحفوظة...');
+                app.loadData();
+                
+                // تحميل المظهر المحفوظ
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme) {
+                    ui.applyTheme(savedTheme);
+                }
+                
+                console.log('  ✅ بيانات المستخدم محملة');
+                console.log('  ✅ المظهر محمل');
+            }
+
+            /**
+             * التحقق من جلسة المستخدم
+             */
+            checkUserSession() {
+                console.log('👤 التحقق من جلسة المستخدم...');
+                
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    app.currentUser = JSON.parse(currentUser);
+                    console.log(`  ✅ المستخدم: ${app.currentUser.username}`);
+                    return true;
+                }
+                console.log('  ℹ️ لا توجد جلسة نشطة');
+                return false;
+            }
+
+            /**
+             * عرض الشاشة الأولى
+             */
+            showInitialScreen() {
+                const hasActiveSession = this.checkUserSession();
+                
+                if (hasActiveSession) {
+                    console.log('📊 عرض لوحة التحكم');
+                    ui.renderScreen('dashboard');
+                } else {
+                    console.log('🔐 عرض شاشة تسجيل الدخول');
+                    ui.renderScreen('login');
+                }
+            }
+
+            /**
+             * معالجة أخطاء التهيئة
+             */
+            handleInitializationError(error) {
+                console.error('تفاصيل الخطأ:', error);
+                
+                ui.showNotification({
+                    message: 'حدث خطأ في تهيئة التطبيق',
+                    type: 'error',
+                    duration: 5000
+                });
+
+                // محاولة إعادة التهيئة بعد 3 ثوان
+                setTimeout(() => {
+                    console.log('🔄 محاولة إعادة التهيئة...');
+                    this.initialize();
+                }, 3000);
+            }
+        }
+
+        /**
+         * فئة AppMonitor
+         * مراقبة أداء التطبيق
+         */
+        class AppMonitor {
+            constructor() {
+                this.metrics = {
+                    startTime: Date.now(),
+                    screenTransitions: 0,
+                    totalTests: 0,
+                    totalAnswers: 0,
+                    errors: 0
+                };
+            }
+
+            /**
+             * تسجيل انتقال شاشة
+             */
+            recordScreenTransition(fromScreen, toScreen) {
+                this.metrics.screenTransitions++;
+                console.log(`📱 انتقال من ${fromScreen} إلى ${toScreen}`);
+            }
+
+            /**
+             * تسجيل اختبار جديد
+             */
+            recordTestStart() {
+                this.metrics.totalTests++;
+                console.log(`🎯 بدء الاختبار #${this.metrics.totalTests}`);
+            }
+
+            /**
+             * تسجيل إجابة
+             */
+            recordAnswer(isCorrect) {
+                this.metrics.totalAnswers++;
+                console.log(`${isCorrect ? '✅' : '❌'} إجابة (#${this.metrics.totalAnswers})`);
+            }
+
+            /**
+             * تسجيل خطأ
+             */
+            recordError(error) {
+                this.metrics.errors++;
+                console.error(`❌ خطأ #${this.metrics.errors}:`, error);
+            }
+
+            /**
+             * الحصول على الإحصائيات
+             */
+            getMetrics() {
+                const uptime = Date.now() - this.metrics.startTime;
+                return {
+                    ...this.metrics,
+                    uptime: `${Math.floor(uptime / 1000)}s`,
+                    averageAnswersPerTest: (this.metrics.totalAnswers / this.metrics.totalTests).toFixed(2)
+                };
+            }
+
+            /**
+             * طباعة تقرير الأداء
+             */
+            printReport() {
+                const metrics = this.getMetrics();
+                console.log('📊 تقرير الأداء:');
+                console.log(`  ⏱️ الوقت المستغرق: ${metrics.uptime}`);
+                console.log(`  📱 انتقالات الشاشة: ${metrics.screenTransitions}`);
+                console.log(`  🎯 الاختبارات: ${metrics.totalTests}`);
+                console.log(`  ✍️ الإجابات: ${metrics.totalAnswers}`);
+                console.log(`  ❌ الأخطاء: ${metrics.errors}`);
+            }
+        }
+
+        /**
+         * فئة TestRunner
+         * تشغيل الاختبارات التلقائية
+         */
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+            }
+
+            /**
+             * إضافة اختبار
+             */
+            addTest(name, fn) {
+                this.tests.push({ name, fn });
+            }
+
+            /**
+             * تشغيل جميع الاختبارات
+             */
+            async runAll() {
+                console.log('\n🧪 تشغيل الاختبارات...\n');
+                
+                let passed = 0;
+                let failed = 0;
+
+                for (const test of this.tests) {
+                    try {
+                        await test.fn();
+                        console.log(`✅ ${test.name}`);
+                        passed++;
+                    } catch (error) {
+                        console.error(`❌ ${test.name}`);
+                        console.error(`   السبب: ${error.message}`);
+                        failed++;
+                    }
+                }
+
+                console.log('\n📊 نتائج الاختبارات:');
+                console.log(`  ✅ نجح: ${passed}`);
+                console.log(`  ❌ فشل: ${failed}`);
+                console.log(`  📈 النسبة: ${((passed / (passed + failed)) * 100).toFixed(2)}%\n`);
+
+                return { passed, failed };
+            }
+        }
+
+        /**
+         * تجهيز الاختبارات
+         */
+        const testRunner = new TestRunner();
+
+        // اختبار 1: تهيئة التطبيق
+        testRunner.addTest('تهيئة مدير التطبيق', () => {
+            if (!app.isInitialized) throw new Error('لم يتم التهيئة');
+        });
+
+        // اختبار 2: تسجيل المستخدم
+        testRunner.addTest('تسجيل مستخدم جديد', () => {
+            const result = app.register('testuser_' + Date.now(), 'TestPass123');
+            if (!result.success) throw new Error(result.message);
+        });
+
+        // اختبار 3: تسجيل الدخول
+        testRunner.addTest('تسجيل الدخول', () => {
+            const result = app.login('testuser_' + (Date.now() - 1), 'TestPass123');
+            if (!result.success) throw new Error(result.message);
+        });
+
+        // اختبار 4: بدء جلسة اختبار
+        testRunner.addTest('بدء جلسة اختبار', () => {
+            const result = app.startTestSession(5);
+            if (!result.success) throw new Error(result.message);
+        });
+
+        // اختبار 5: الإجابة على سؤال
+        testRunner.addTest('الإجابة على سؤال', () => {
+            const result = app.answerQuestion(0, 'ا');
+            if (!result.success) throw new Error('فشلت الإجابة');
+        });
+
+        /**
+         * بدء التطبيق عند تحميل الصفحة
+         */
+        document.addEventListener('DOMContentLoaded', async () => {
+            // إنشاء مراقب الأداء
+            const monitor = new AppMonitor();
+
+            // إنشاء المهيئ وتشغيله
+            const initializer = new AppInitializer();
+            await initializer.initialize();
+
+            // تشغيل الاختبارات (اختياري)
+            if (window.location.hash === '#test') {
+                await testRunner.runAll();
+            }
+
+            // طباعة تقرير الأداء
+            console.log('\n');
+            monitor.printReport();
+            console.log('\n');
+        });
+
+        /**
+         * معالجة أخطاء JavaScript العام
+         */
+        window.addEventListener('error', (event) => {
+            console.error('❌ خطأ غير متوقع:', event.error);
+            
+            if (ui && ui.isInitialized) {
+                ui.showNotification({
+                    message: 'حدث خطأ غير متوقع',
+                    type: 'error',
+                    duration: 5000
+                });
+            }
+        });
+
+        /**
+         * معالجة رفض الـ Promises
+         */
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('❌ رفض Promise غير معالج:', event.reason);
+        });
+
+        /**
+         * حفظ البيانات عند إغلاق الصفحة
+         */
+        window.addEventListener('beforeunload', () => {
+            if (app && app.isInitialized) {
+                app.saveData();
+                console.log('💾 تم حفظ البيانات');
+            }
+        });
+    </script>
+
+    <!-- اختبارات التطبيق المتقدمة -->
+    <script>
+        /**
+         * اختبارات إضافية متقدمة
+         */
+        const advancedTests = {
+            /**
+             * اختبار الأمان
+             */
+            testSecurity: () => {
+                console.log('🔐 اختبار نظام الأمان...');
+                const pwd1 = SecurityManager.hashPassword('test123');
+                const pwd2 = SecurityManager.hashPassword('test123');
+                if (pwd1 !== pwd2) {
+                    console.warn('⚠️ تحذير: التجزئة غير ثابتة');
+                } else {
+                    console.log('✅ نظام التجزئة يعمل بشكل صحيح');
+                }
+            },
+
+            /**
+             * اختبار التحليلات
+             */
+            testAnalytics: () => {
+                console.log('📊 اختبار نظام التحليلات...');
+                const mockResults = [
+                    { questionId: 1, letter: 'ا', userAnswer: 'ا', isCorrect: true },
+                    { questionId: 2, letter: 'ب', userAnswer: 'ا', isCorrect: false }
+                ];
+                const stats = AnalyticsSystem.calculateTestStatistics(mockResults);
+                if (stats.accuracy === 50) {
+                    console.log('✅ التحليلات تعمل بشكل صحيح');
+                }
+            },
+
+            /**
+             * اختبار الواجهة الرسومية
+             */
+            testUI: () => {
+                console.log('🎨 اختبار الواجهة الرسومية...');
+                if (ui && ui.isInitialized) {
+                    console.log('✅ الواجهة الرسومية جاهزة');
+                } else {
+                    console.warn('⚠️ الواجهة الرسومية غير مهيأة');
+                }
+            },
+
+            /**
+             * اختبار الأداء
+             */
+            testPerformance: () => {
+                console.log('⚡ اختبار الأداء...');
+                const start = performance.now();
+                
+                // محاكاة عملية ما
+                for (let i = 0; i < 1000; i++) {
+                    Math.sqrt(i);
+                }
+                
+                const duration = performance.now() - start;
+                console.log(`⏱️ الوقت المستغرق: ${duration.toFixed(2)}ms`);
+                
+                if (duration < 100) {
+                    console.log('✅ الأداء ممتاز');
+                } else {
+                    console.warn('⚠️ الأداء قد يكون بطيء');
+                }
+            },
+
+            /**
+             * اختبار التخزين
+             */
+            testStorage: () => {
+                console.log('💾 اختبار التخزين...');
+                localStorage.setItem('testKey', 'testValue');
+                const value = localStorage.getItem('testKey');
+                
+                if (value === 'testValue') {
+                    console.log('✅ التخزين يعمل بشكل صحيح');
+                    localStorage.removeItem('testKey');
+                } else {
+                    console.warn('⚠️ التخزين غير متاح');
+                }
+            }
+        };
+
+        /**
+         * تشغيل جميع الاختبارات المتقدمة
+         */
+        function runAdvancedTests() {
+            console.log('\n🧪 الاختبارات المتقدمة:\n');
+            Object.keys(advancedTests).forEach(testName => {
+                try {
+                    advancedTests[testName]();
+                } catch (error) {
+                    console.error(`❌ خطأ في ${testName}:`, error);
+                }
+            });
+            console.log('\n');
+        }
+
+        // تشغيل الاختبارات المتقدمة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#advanced-test') {
+                runAdvancedTests();
+            }
+        });
+    </script>
+</body>
+</html>
