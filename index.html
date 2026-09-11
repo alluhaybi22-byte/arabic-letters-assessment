@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقييم الحروف العربية</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- شاشة الترحيب -->
+        <div id="welcomeScreen" class="screen active">
+            <div class="welcome-content">
+                <h1 class="welcome-title">اختبار الحروف العربية</h1>
+                <p class="welcome-subtitle">اختبار تشخيصي لإتقان الحروف</p>
+                
+                <div class="input-group">
+                    <label for="studentName" class="input-label">اسم الطالب:</label>
+                    <input 
+                        type="text" 
+                        id="studentName" 
+                        class="input-field" 
+                        placeholder="أدخل اسم الطالب"
+                        maxlength="50"
+                    >
+                </div>
+                
+                <button id="startBtn" class="btn btn-primary">ابدأ الاختبار</button>
+                
+                <div class="welcome-info">
+                    <p>📝 الاختبار يشمل 28 حرفًا من الحروف العربية</p>
+                    <p>🎤 سيتم تسجيل إجابتك الصوتية</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة الاختبار -->
+        <div id="testScreen" class="screen">
+            <div class="test-header">
+                <div class="progress-info">
+                    <span id="progressCounter" class="progress-counter">0 / 28</span>
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-content">
+                <div class="letter-display">
+                    <div id="letterChar" class="letter-char">ا</div>
+                    <p id="letterName" class="letter-name">الألف</p>
+                </div>
+
+                <div class="test-instructions">
+                    <p>انطق اسم الحرف بصوتك العالي</p>
+                </div>
+
+                <div class="recording-controls">
+                    <button id="recordBtn" class="btn btn-record">
+                        <span class="record-icon">🎤</span>
+                        <span id="recordText">ابدأ التسجيل</span>
+                    </button>
+                    <div id="recordingIndicator" class="recording-indicator hidden">
+                        <span class="recording-dot"></span>
+                        <span id="recordingTime">00:00</span>
+                    </div>
+                </div>
+
+                <div id="resultDisplay" class="result-display hidden">
+                    <div id="resultContent" class="result-content"></div>
+                    <button id="nextBtn" class="btn btn-primary btn-full">التالي</button>
+                </div>
+            </div>
+
+            <button id="skipBtn" class="btn btn-secondary btn-skip">تخطي</button>
+        </div>
+
+        <!-- شاشة النتائج -->
+        <div id="resultsScreen" class="screen">
+            <div class="results-container">
+                <h1 class="results-title">نتائج الاختبار</h1>
+                <p id="studentResultName" class="student-name"></p>
+
+                <!-- الإحصائيات العامة -->
+                <div class="statistics">
+                    <div class="stat-card">
+                        <div class="stat-value" id="masteredCount">0</div>
+                        <div class="stat-label">حروف متقنة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="unasteredCount">0</div>
+                        <div class="stat-label">حروف غير متقنة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="percentageScore">0%</div>
+                        <div class="stat-label">نسبة الإتقان</div>
+                    </div>
+                </div>
+
+                <!-- التفاصيل المرحلي -->
+                <div class="detailed-results">
+                    <h2>نتائج الحروف:</h2>
+                    <div id="detailedLettersList" class="letters-list"></div>
+                </div>
+
+                <!-- الحروف التي تحتاج تدريب -->
+                <div id="needsTrainingSection" class="needs-training-section hidden">
+                    <h2>الحروف التي تحتاج إلى تدريب:</h2>
+                    <div id="needsTrainingList" class="needs-training-list"></div>
+                </div>
+
+                <!-- الأزرار -->
+                <div class="results-actions">
+                    <button id="restartBtn" class="btn btn-primary">اختبار جديد</button>
+                    <button id="downloadBtn" class="btn btn-secondary">تحميل التقرير</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
